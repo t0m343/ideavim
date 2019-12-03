@@ -171,6 +171,7 @@ class VimShortcutKeyAction : AnAction(), DumbAware {
     val inputEvent = e.inputEvent
     if (inputEvent is KeyEvent) {
       val defaultKeyStroke = KeyStrokeAdapter.getDefaultKeyStroke(inputEvent)
+      val extendedKeyStroke = KeyStrokeAdapter.getKeyStroke(inputEvent,true);
       val strokeCache = keyStrokeCache
       if (defaultKeyStroke != null) {
         keyStrokeCache = inputEvent to defaultKeyStroke
@@ -178,6 +179,9 @@ class VimShortcutKeyAction : AnAction(), DumbAware {
       } else if (strokeCache.first === inputEvent) {
         keyStrokeCache = null to null
         return strokeCache.second
+      } else if (extendedKeyStroke != null) {
+        keyStrokeCache = inputEvent to extendedKeyStroke
+        return extendedKeyStroke
       }
       return KeyStroke.getKeyStrokeForEvent(inputEvent)
     }
